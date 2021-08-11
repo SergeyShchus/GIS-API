@@ -1,0 +1,6 @@
+node_modules/*
+build/*
+.vscode/*
+src/*.js*
+src/widgets/*.js*
+src/utils/*.js*

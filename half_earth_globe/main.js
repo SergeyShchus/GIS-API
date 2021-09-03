@@ -1,3 +1,9 @@
+// метод require дозволяє завантажувати модулі з бібліотеки JavaScript. 
+//За ним слідують відкрита дужка і відкрита квадратних дужок. 
+//У квадратних дужках модулі Map і SceneView перераховані в якості модулів esri для завантаження. 
+//Рядок esri / Map завантажує код, специфічний для створення карти, в той час як рядок esri / views / SceneView завантажує код, що дозволяє переглядати карту в 3D. 
+//Включення цих рядків в розділ require робить їх доступними в інших частинах програми. 
+//Рядок domReady! наказує браузеру чекати виконання коду до тих пір, поки не буде завантажена вся сторінка.
 require([
     "esri/Map",
     "esri/views/SceneView",
@@ -19,16 +25,20 @@ require([
     Graphic
     ) {
   
+    //Цей код створює шар з ім'ям satelliteLayer , який є екземпляром класу TileLayer , встановлює його для вилучення листів з певного URL-адреси і привласнює йому назву satellite .
       const satelliteLayer = new TileLayer({
         url: "https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer",
         title: "satellite"
       })
       
+      //Цей код створює інший шар з ім'ям fireflyLayer , який є екземпляром класу TileLayer , 
+      //встановлює його для вилучення листів з певного URL-адреси і привласнює йому назву half-earth-firefly .
       const fireflyLayer = new TileLayer({
         url: "https://tiles.arcgis.com/tiles/nGt4QxSblgDfeJn9/arcgis/rest/services/HalfEarthFirefly/MapServer",
         title: "half-earth-firefly"
       })
       
+      //Ці рядки створюють екземпляр класу карти і встановлюють базову карту для карти в базову карту Знімки Esri за замовчуванням.
       const basemap = new Basemap({
         baseLayers: [satelliteLayer, fireflyLayer],
         title: "half-earth-basemap",
@@ -48,9 +58,12 @@ require([
         layers: [protected, rangelands]
       });
     
+    //Ці рядки створюють екземпляр класу SceneView і встановлюють карту, яку буде відображати сцена, на карту.
+    //Він також вказує, що цей клас SceneView поміщається всередині елемента sceneContainer поділу HTML-сторінки.
       const view = new SceneView({
         map: map,
         container: "sceneContainer",
+          //Ці рядки коду відключають ефект атмосфери, який надавав глобусу ореол. Замість цього ви встановлюєте суцільний колір фону, використовуючи нотацію RGB.
         environment: {
           atmosphereEnabled: false,
           background: {
@@ -58,6 +71,7 @@ require([
             color: [0,10,16]
           }
         },
+          //Ці рядки видаляють елементи управління за замовчуванням, за винятком кнопок управління масштабуванням.
         ui: {
           components: ["zoom"]
          }

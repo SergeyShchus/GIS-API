@@ -38,21 +38,25 @@ require([
         title: "half-earth-firefly"
       })
       
-      //Ці рядки створюють екземпляр класу карти і встановлюють базову карту для карти в базову карту Знімки Esri за замовчуванням.
+      //Цей код створює базову карту, яка включає в себе два створених шару аркушів, і дає їй назву half-earth-basemap .
       const basemap = new Basemap({
         baseLayers: [satelliteLayer, fireflyLayer],
         title: "half-earth-basemap",
         id: "half-earth-basemap"
       });
   
+    //Цей код створює шар з ім'ям rangelands , який є екземпляром класу TileLayer, і встановлює його для вилучення лисів з певного URL-адреси.
       const rangelands = new TileLayer({
         url: 'https://tiles.arcgis.com/tiles/IkktFdUAcY3WrH25/arcgis/rest/services/gHM_Rangeland_inverted/MapServer'
       })
   
+     // Цей код створює ще один новий шар з ім'ям protected , який є екземпляром класу FeatureLayer, 
+     //і встановлює його для вилучення об'єктів з певного елементу URL-адреси сервісу об'єктів. 
       const protected = new FeatureLayer({
         url: 'https://services5.arcgis.com/Mj0hjvkNtV7NRhA7/arcgis/rest/services/WDPA_v0/FeatureServer/1'
       })
       
+      //Ці рядки створюють екземпляр класу карти і встановлюють базову карту для карти в базову карту
       const map = new Map({
         basemap: basemap,
         layers: [protected, rangelands]

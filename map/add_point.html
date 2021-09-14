@@ -21,7 +21,13 @@
     <script src="https://js.arcgis.com/4.20/"></script>
 
     <script>
-      require(["esri/config","esri/Map", "esri/views/MapView"], function (esriConfig,Map, MapView) {
+      require(["esri/config"
+      ,"esri/Map"
+      , "esri/views/MapView"
+      ,"esri/Graphic"// https://developers.arcgis.com/javascript/latest/add-a-point-line-and-polygon/
+      ,"esri/layers/GraphicsLayer"
+    ]
+    , function (esriConfig,Map, MapView, Graphic, GraphicsLayer) {
 
         esriConfig.apiKey = "AAPKfc54aa8824ce43438319302883c00f067M3SzvbHrLXNdw3pQ35B0rhTTv1gScC9JC-tUlqCeR5M6SjEJbtY2Im-Sba9biQ_";
 
@@ -35,6 +41,29 @@
           zoom: 13, // Zoom level
           container: "viewDiv" // Div element
         });
+
+        const graphicsLayer = new GraphicsLayer();
+        map.add(graphicsLayer);
+
+        const point = { //Create a point
+    type: "point",
+    longitude: 23.683714,
+    latitude: 48.616476
+ };
+ const simpleMarkerSymbol = {
+    type: "simple-marker",
+    color: [226, 119, 40],  // Orange
+    outline: {
+        color: [255, 255, 255], // White
+        width: 1
+    }
+ };
+
+ const pointGraphic = new Graphic({
+    geometry: point,
+    symbol: simpleMarkerSymbol
+ });
+ graphicsLayer.add(pointGraphic);
 
       });
     </script>

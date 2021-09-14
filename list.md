@@ -10,6 +10,7 @@ https://developers.arcgis.com/javascript/3/jshelp/intro_firstmap_amd.html
 
 
 1. https://learn.arcgis.com/ru/projects/build-a-3d-globe-app-with-the-arcgis-api-for-javascript/
+2. 
 
 Тут налаштування середовища, початок роботи. Перший додаток
 

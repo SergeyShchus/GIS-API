@@ -23,3 +23,10 @@ next https://developers.arcgis.com/javascript/latest/showcase/
 
 
 
+Build the app
+Follow these steps to host the code locally and make modifications:
+
+Download the code.
+Open the terminal and navigate to the root of this project: $ cd national-park-visits
+Run npm run tsc -w
+Make your modifications.

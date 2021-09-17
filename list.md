@@ -17,7 +17,14 @@ https://developers.arcgis.com/javascript/3/jshelp/intro_firstmap_amd.html
 next https://developers.arcgis.com/javascript/latest/display-a-custom-basemap-style/
 
 next https://developers.arcgis.com/javascript/latest/showcase/
-/
+l
+l
+l
+l
+l
+l
+l
+
 /
 /
 /

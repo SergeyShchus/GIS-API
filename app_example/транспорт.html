@@ -1,0 +1,125 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="initial-scale=1,maximum-scale=1,user-scalable=no"
+    />
+    <title>Intro to layers | Sample | ArcGIS API for JavaScript 4.21</title>
+
+    <link
+      rel="stylesheet"
+      href="https://js.arcgis.com/4.21/esri/themes/light/main.css"
+    />
+    <script src="https://js.arcgis.com/4.21/"></script>
+
+    <style>
+      html,
+      body,
+      #viewDiv {
+        padding: 0;
+        margin: 0;
+        height: 100%;
+        width: 100%;
+      }
+
+      #layerToggle {
+        top: 20px;
+        right: 20px;
+        position: absolute;
+        z-index: 99;
+        background-color: white;
+        border-radius: 8px;
+        padding: 10px;
+        opacity: 0.75;
+      }
+    </style>
+
+    <script>
+         /*********1.Додати шари******/   
+
+      require(["esri/Map",
+       "esri/views/SceneView",
+        "esri/layers/TileLayer"], (
+        Map,
+        SceneView,
+        TileLayer
+      ) => { 
+        const transportationLayer = new TileLayer({
+          url: "https://server.arcgisonline.com/arcgis/rest/services/Reference/World_Transportation/MapServer",
+          id: "streets",/*Встановіть додаткові властивості для шарів*/
+          visible: false/*Встановіть додаткові властивості для шарів*/
+        });
+
+        const housingLayer = new TileLayer({
+          url: "https://tiles.arcgis.com/tiles/nGt4QxSblgDfeJn9/arcgis/rest/services/New_York_Housing_Density/MapServer",
+          id: "ny-housing",/*Встановіть додаткові властивості для шарів*/
+          opacity: 0.9/*Встановіть додаткові властивості для шарів*/
+        });
+         
+         /*****Додати шари***/  
+
+
+        /**3. Додати шари на карту*/
+
+        const map = new Map({
+          basemap: "oceans",
+          layers: [housingLayer]
+        });
+
+         /**Додати шари на карту***/       
+
+        /*****************************************************************
+         * Or they may be added to the map using map.add()
+         *****************************************************************/
+        map.add(transportationLayer);
+
+        const view = new SceneView({
+          container: "viewDiv",
+          map: map
+        });
+
+        /******4. Відображення операційних шарів карти*******/
+
+        view.on("layerview-create", (event) => {
+          if (event.layer.id === "ny-housing") {
+            console.log(
+              "LayerView for male population created!",
+              event.layerView
+            );
+          }
+          if (event.layer.id === "streets") {
+            console.log("LayerView for streets created!", event.layerView);
+          }
+          /******Відображення операційних шарів карти*******/
+        });
+
+        view.when(() => {
+          housingLayer.when(() => {
+            view.goTo(housingLayer.fullExtent).catch((error) => {
+              console.error(error);
+            });
+          });
+        });
+
+        const streetsLayerToggle = document.getElementById("streetsLayer");
+
+        /*****************************************************************
+         * Властивість visible на шарі можна використовувати для перегляду видимості
+         *  шару у поданні. Коли видимість вимкнена, шар все ще є частиною карти, 
+         * а це означає, що ви можете отримати доступ до його властивостей 
+         * та виконати аналіз, навіть якщо він не видно.
+         *******************************************************************/
+        streetsLayerToggle.addEventListener("change", () => {
+          transportationLayer.visible = streetsLayerToggle.checked; /*Налаштування прапорця*/
+        });
+      });
+    </script>
+  </head>
+  <body>
+    <div id="viewDiv"></div>
+    <span id="layerToggle" class="esri-widget"> 
+      <input type="checkbox" id="streetsLayer" /> Transportation 
+    </span>
+  </body>
+</html>

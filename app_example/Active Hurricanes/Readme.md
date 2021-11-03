@@ -1,5 +1,7 @@
 ##Active Hurricanes
 
+![image](https://github.com/SergeyShchus/GIS-API/blob/main/app_example/Active%20Hurricanes/image/%D1%83%D1%80%D0%B0%D0%B3%D0%B0%D0%BD%D0%B8.JPG?raw=true)
+
 Додаток 
 https://www.arcgis.com/apps/webappviewer/index.html?id=0c90dcbb86ca46bcb3190dac45b3fea8
 

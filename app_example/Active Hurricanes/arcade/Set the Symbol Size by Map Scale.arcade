@@ -1,0 +1,18 @@
+var MaxWind = $feature.MAXWIND
+var vs = $view.scale
+
+var WindSize = when(
+MaxWind > 136, 24, //Cat 5
+MaxWind > 112, 23, //Cat 4
+MaxWind > 95, 22, //Cat 3
+MaxWind > 82, 21, //Cat 2
+MaxWind > 63, 20, //Cat 1
+MaxWind > 33, 18, //Storm
+16) //Depression
+
+when(
+vs >=37000000, WindSize,
+vs >=18500000, 1 + WindSize,
+vs >=9300000, 2 + WindSize,
+vs >=4700000, 4 + WindSize,
+vs >=2000000, 6 + WindSize, 8 + WindSize)

@@ -1,0 +1,11 @@
+var MaxWind = $feature.MAXWIND
+
+when(
+MaxWind > 136, “Category 5”,
+MaxWind > 112, “Category 4”,
+MaxWind > 95, “Category 3”,
+MaxWind > 82, “Category 2”,
+MaxWind > 63, “Category 1”,
+MaxWind > 33, “Tropical Storm”,
+“Tropical Depression”
+)

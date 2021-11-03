@@ -13,3 +13,5 @@ https://www.arcgis.com/home/group.html?id=57895c42fd8e474d9d99f6cf422ff749#overv
 Опис
 https://www.esri.com/arcgis-blog/products/arcgis-living-atlas/mapping/updated-arcade-scaling-symbology/
 
+Шар
+https://arcgis-content.maps.arcgis.com/home/item.html?id=248e7b5827a34b248647afb012c58787

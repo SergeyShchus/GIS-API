@@ -1,0 +1,224 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="initial-scale=1,maximum-scale=1,user-scalable=no"
+    />
+
+    <title>
+      Binning - basic configuration | Sample | ArcGIS API for JavaScript 4.24
+    </title>
+
+    <style>
+      html,
+      body,
+      #viewDiv {
+        padding: 0;
+        margin: 0;
+        height: 100%;
+        width: 100%;
+      }
+      #infoDiv {
+        padding: 10px;
+      }
+    </style>
+
+    <script
+      type="module"
+      src="https://js.arcgis.com/calcite-components/1.0.0-beta.83/calcite.esm.js"
+    ></script>
+    <script
+      nomodule=""
+      src="https://js.arcgis.com/calcite-components/1.0.0-beta.83/calcite.js"
+    ></script>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://js.arcgis.com/calcite-components/1.0.0-beta.83/calcite.css"
+    />
+
+    <link
+      rel="stylesheet"
+      href="https://js.arcgis.com/4.24/esri/themes/dark/main.css"
+    />
+    <script src="https://js.arcgis.com/4.24/"></script>
+
+    <script type="text/javascript">
+      require([
+        "esri/Map",
+        "esri/views/MapView",
+        "esri/layers/FeatureLayer",
+        "esri/widgets/Legend",
+        "esri/widgets/Expand",
+        "esri/widgets/Home",
+        "esri/widgets/TimeSlider",
+        "esri/Color",
+        "esri/core/lang"
+      ], function (
+        Map,
+        MapView,
+        FeatureLayer,
+        Legend,
+        Expand,
+        Home,
+        TimeSlider,
+        Color,
+        esriLang
+      ) {
+
+        (async () => {
+
+          const colors = ["#ccbba3", "#d3b68a", "#d9b270", "#e0ad57", "#e6a852", "#eca32f", "#f39f1f", "#f99a10", "#ff9500", "#ffae00", "#ffc600", "#ffde00", "#fff700"];
+
+          const year = 2020;
+
+          const layer = new FeatureLayer({
+            title: "Fire and destroyed (june 2022)",
+            portalItem: {
+            id: "4d4664c7cfa5472f95d75a09e9baa5b4"
+          },
+            popupTemplate: {
+              title: "Fire location",
+              content: [
+                {
+                  type: "fields",
+                  fieldInfos: [
+                    {
+                      fieldName: "DAYNIGHT",
+                      label: "N",
+                    },
+                    {
+                      fieldName: "DAYNIGHT",
+                      label: "N"
+                    },
+                    {
+                      fieldName: "DAYNIGHT",
+                      label: "D"
+                    }
+                  ]
+                }
+              ]
+            },
+            renderer: {
+              type: "heatmap",
+              colorStops: createColorStops(colors),
+              maxDensity: 0.1,
+              minDensity: 0,
+              radius: 16
+            }
+          });
+
+          function createColorStops (ramp){
+            const colors = esriLang.clone(ramp);
+            const firstColora = new Color(colors.shift());
+            firstColora.a = 0;
+            const firstColorb = firstColora.clone();
+            firstColorb.a = 0.01;
+
+            const b = colors.length;
+            const stops = [
+              { color: firstColora, ratio: 0 },
+              { color: firstColorb, ratio: 0.01 },
+              { color: firstColorb, ratio: 0.01 },
+              { color: firstColorb, ratio: 0.01 },
+              ...colors.map((c, i) => {
+                const ratio = (b-(b-(i+1)))/b;
+                const color = new Color(c);
+                color.a = ratio;
+                return {
+                  color,
+                  ratio
+                };
+              })
+            ];
+            return stops;
+          }
+
+          const map = new Map({
+            basemap: "dark-gray-vector",
+            layers: [layer]
+          });
+
+          const view = new MapView({
+            container: "viewDiv",
+            map: map,
+            center: [35.277440, 47.816897],
+            scale: 144447,
+            constraints: {
+              snapToZoom: false
+            }
+          });
+
+          view.ui.add(
+            new Home({
+              view: view
+            }),
+            "top-left"
+          );
+
+          const legend = new Legend({
+            view: view,
+            container: "legendDiv"
+          });
+
+          const infoDiv = document.getElementById("infoDiv");
+          view.ui.add(
+            new Expand({
+              view: view,
+              content: infoDiv,
+              expandIconClass: "esri-icon-layer-list",
+              expanded: true
+            }),
+            "bottom-left"
+          );
+
+          const toggleButton = document.getElementById("toggleBtn");
+          toggleButton.onclick = () => {
+            const renderer = layer.renderer.clone();
+            renderer.referenceScale = renderer.referenceScale ? null : view.scale;
+            layer.renderer = renderer;
+          };
+
+          // time slider widget initialization
+          const timeSlider = new TimeSlider({
+            container: "timeSlider",
+            timeVisible: false,
+            fullTimeExtent: {
+              start: new Date(Date.UTC(2020,0,1)),
+              end: new Date(Date.UTC(2020,11,31))
+            },
+            stops: {
+              interval: {
+                value: 1,
+                unit: "weeks"
+              }
+            },
+            loop: true,
+            playRate: 500
+          });
+
+          const layerView = await view.whenLayerView(layer);
+
+          timeSlider.watch("timeExtent", (timeExtent) => {
+            const {start, end} = timeExtent;
+            layer.featureEffect = {
+              filter: {
+                where: `CRASH_DATE BETWEEN ${start.valueOf()} AND ${end.valueOf()}`
+              },
+              excludedEffect: "grayscale(100%) opacity(70%) blur(3px)"
+            }
+          });
+        })()
+
+      });
+    </script>
+  </head>
+  <body>
+    <div id="viewDiv"></div>
+    <div id="infoDiv" class="esri-widget">
+      <calcite-button id="toggleBtn" secondary width="full">Toggle reference scale</calcite-button>
+      <div id="legendDiv"></div>
+    </div>
+  </body>
+</html>
